@@ -1,0 +1,12 @@
+node_modules
+dist
+dev-dist
+.env
+.env.local
+.firebase
+*-debug.log
+firestore-debug.log
+ui-debug.log
+# Personal data. Import it through the app, never commit it.
+Expense.xlsx
+firebase-debug.log

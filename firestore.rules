@@ -1,0 +1,114 @@
+rules_version = '2';
+
+// Every document lives under users/{uid}. Nobody can touch another user's tree,
+// and each collection validates its own shape so a bad client cannot write junk.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedInAs(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function positive(v) {
+      return (v is int || v is float) && v > 0 && v < 100000000;
+    }
+
+    function optString(d, key, max) {
+      return !(key in d) || (d[key] is string && d[key].size() <= max);
+    }
+
+    function categories() {
+      return ['Food', 'Transport', 'Medical', 'Stationery', 'Academics',
+              'Hostel', 'Workshop/Events', 'Others'];
+    }
+
+    function validTransaction(d) {
+      return d.keys().hasOnly(['date', 'category', 'amount', 'type', 'note', 'tags',
+                               'source', 'reimbursement', 'origin', 'createdAt', 'updatedAt'])
+        && d.date is timestamp
+        && positive(d.amount)
+        && d.type in ['expense', 'income']
+        && (d.type == 'income' || d.category in categories())
+        && (d.type == 'expense' || d.category == 'Income')
+        && optString(d, 'note', 500)
+        && (!('tags' in d) || (d.tags is list && d.tags.size() <= 20))
+        && (!('source' in d) || d.source in ['scholarship', 'refund', 'other'])
+        && (!('reimbursement' in d) || d.reimbursement in ['none', 'pending', 'received'])
+        && (!('origin' in d) || d.origin in ['manual', 'import', 'template']);
+    }
+
+    function validFee(d) {
+      return d.keys().hasOnly(['academicYear', 'description', 'section', 'amount', 'status', 'paidDate', 'order'])
+        && d.academicYear is int && d.academicYear >= 1 && d.academicYear <= 4
+        && d.description is string && d.description.size() > 0 && d.description.size() <= 120
+        && optString(d, 'section', 80)
+        && positive(d.amount)
+        && d.status in ['paid', 'pending']
+        && (!('paidDate' in d) || d.paidDate == null || d.paidDate is timestamp);
+    }
+
+    function validHostel(d) {
+      return d.keys().hasOnly(['month', 'amount', 'kind', 'stay', 'label', 'refundable'])
+        && (d.month == null || (d.month is string && d.month.matches('^[0-9]{4}-[0-9]{2}$')))
+        && positive(d.amount)
+        && d.kind in ['monthly', 'advance', 'deposit']
+        && (!('stay' in d) || d.stay is int)
+        && optString(d, 'label', 80);
+    }
+
+    function validScholarship(d) {
+      return d.keys().hasOnly(['name', 'amount', 'date'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && positive(d.amount)
+        && d.date is timestamp;
+    }
+
+    function validTemplate(d) {
+      return d.keys().hasOnly(['name', 'category', 'amount', 'note'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 60
+        && d.category in categories()
+        && positive(d.amount)
+        && optString(d, 'note', 200);
+    }
+
+    match /users/{uid} {
+      allow read, write: if signedInAs(uid);
+
+      match /transactions/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validTransaction(request.resource.data);
+      }
+      match /fees/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validFee(request.resource.data);
+      }
+      match /hostel/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validHostel(request.resource.data);
+      }
+      match /scholarships/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validScholarship(request.resource.data);
+      }
+      match /templates/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validTemplate(request.resource.data);
+      }
+      match /budgets/{category} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid)
+          // Doc ids cannot contain "/", so Workshop/Events is stored as Workshop|Events.
+          && (category in categories() || category == 'Workshop|Events')
+          && request.resource.data.keys().hasOnly(['monthlyLimit'])
+          && positive(request.resource.data.monthlyLimit);
+      }
+      match /settings/{doc} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && doc == 'profile'
+          && request.resource.data.keys().hasOnly(['currency', 'theme', 'defaultView'])
+          && (!('theme' in request.resource.data) || request.resource.data.theme in ['light', 'dark', 'system'])
+          && (!('defaultView' in request.resource.data) || request.resource.data.defaultView in ['auto', 'mobile', 'desktop']);
+      }
+    }
+  }
+}

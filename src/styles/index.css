@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens. Values are space-separated RGB so Tailwind can apply alpha.
+  Muted text is darker than the brand grey #868685 because that grey fails
+  WCAG AA on white; #868685 is kept for decorative strokes only.
+*/
+@layer base {
+  :root {
+    --bg: 242 244 239;          /* #F2F4EF */
+    --surface: 255 255 255;
+    --sunk: 232 235 230;        /* #E8EBE6 */
+    --line: 220 224 216;
+    --ink: 14 15 12;            /* #0E0F0C */
+    --muted: 88 92 84;
+    --accent: 159 232 112;      /* #9FE870 */
+    --accent-hover: 134 222 88;
+    --accent-ink: 22 51 0;      /* #163300 */
+    --expense: 180 35 24;
+    --income: 40 110 18;
+    --warn: 135 76 0;
+    --on-expense: 255 255 255;
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: 9 17 5;
+    --surface: 18 32 10;
+    --sunk: 27 46 16;
+    --line: 44 66 32;
+    --ink: 238 245 232;
+    --muted: 172 188 162;
+    --accent: 159 232 112;
+    --accent-hover: 185 240 148;
+    --accent-ink: 22 51 0;
+    --expense: 255 146 124;
+    --income: 159 232 112;
+    --warn: 245 185 74;
+    --on-expense: 42 10 4;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: 'ss01';
+  }
+
+  h1, h2, h3 {
+    @apply font-extrabold tracking-tight;
+    letter-spacing: -0.03em;
+  }
+
+  /* One visible focus style everywhere, never removed. */
+  :focus-visible {
+    outline: 3px solid rgb(var(--ink));
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  input, select, textarea, button { font: inherit; color: inherit; }
+}
+
+@layer components {
+  .num { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+  .card { @apply bg-surface rounded-card shadow-soft; }
+
+  /* Buttons. Hover darkens the fill instead of fading it. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-control px-5 min-h-[44px]
+           font-bold text-[15px] transition-colors duration-150 select-none
+           disabled:cursor-not-allowed disabled:bg-sunk disabled:text-muted;
+  }
+  .btn-primary { @apply btn bg-accent text-accent-ink hover:bg-accent-hover active:translate-y-px; }
+  .btn-secondary { @apply btn bg-sunk text-ink hover:bg-line active:translate-y-px; }
+  .btn-ghost { @apply btn bg-transparent text-ink hover:bg-sunk; }
+  .btn-danger { @apply btn bg-expense text-on-expense hover:brightness-110; }
+  .btn-sm { @apply min-h-[36px] px-4 text-sm; }
+
+  .icon-btn {
+    @apply inline-flex items-center justify-center rounded-control w-11 h-11 text-ink
+           hover:bg-sunk transition-colors duration-150;
+  }
+
+  .field-label { @apply block text-sm font-semibold text-muted mb-1.5; }
+  .field {
+    @apply w-full rounded-control bg-sunk border-2 border-transparent px-4 min-h-[48px]
+           text-[15px] placeholder:text-muted focus:border-ink focus:outline-none;
+  }
+  .field-error { @apply text-sm font-semibold text-expense mt-1.5; }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-control pl-1.5 pr-4 min-h-[44px] font-semibold text-sm
+           bg-sunk text-ink border-2 border-transparent transition-colors duration-150 hover:bg-line;
+  }
+  .chip[aria-pressed='true'], .chip[aria-checked='true'] { @apply bg-forest text-lime hover:bg-forest; }
+  .dark .chip[aria-pressed='true'], .dark .chip[aria-checked='true'] { @apply bg-lime text-forest; }
+  /* Keep the chip's icon readable on the dark selected fill. */
+  .chip[aria-pressed='true'] > span[aria-hidden], .chip[aria-checked='true'] > span[aria-hidden] { color: inherit; background: rgb(255 255 255 / 0.14) !important; }
+
+  .eyebrow { @apply text-[13px] font-semibold text-muted; }
+
+  .skeleton { @apply bg-sunk rounded-badge; animation: pulse 1.4s ease-in-out infinite; }
+}
+
+@keyframes pulse { 50% { opacity: 0.5; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 0.9s linear infinite; }
+
+/* Hide scrollbars on horizontal chip rows while keeping them scrollable. */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Printable monthly report: only the report content, on white paper. */
+@media print {
+  @page { margin: 14mm; }
+  html, body { background: #fff !important; color: #0E0F0C !important; }
+  .no-print { display: none !important; }
+  .print-area { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; background: #fff !important; }
+  .print-area * { color: #0E0F0C !important; }
+  .print-break { break-inside: avoid; }
+  main { padding: 0 !important; margin: 0 !important; }
+}
