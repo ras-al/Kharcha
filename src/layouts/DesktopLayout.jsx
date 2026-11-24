@@ -9,7 +9,6 @@ import MonthSwitcher from '../components/MonthSwitcher';
 import OfflineBanner from '../components/OfflineBanner';
 import { Dialog } from '../components/Overlay';
 import QuickAddCard from '../components/quickadd/QuickAddCard';
-import UpdatePrompt from '../components/UpdatePrompt';
 import { useAuth } from '../context/AuthContext';
 import { usePeriod } from '../context/PeriodContext';
 import { useQuickAdd } from '../context/QuickAddContext';
@@ -101,7 +100,6 @@ export default function DesktopLayout({ children }) {
         {quick.open && <QuickAddCard key={quick.editing?.id || 'new'} editing={quick.editing} preset={quick.preset} onDone={quick.close} idPrefix="dialog" autoFocus bare />}
       </Dialog>
       <ToastViewport className="left-8 bottom-8" />
-      <UpdatePrompt />
     </div>
   );
 }

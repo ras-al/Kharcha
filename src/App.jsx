@@ -1,8 +1,10 @@
 import { MotionConfig } from 'framer-motion';
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, matchPath, Route, Routes, useLocation } from 'react-router-dom';
+import InstallPrompt from './components/InstallPrompt';
 import SetupScreen from './components/SetupScreen';
 import { LoadingScreen } from './components/States';
+import UpdatePrompt from './components/UpdatePrompt';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { PeriodProvider } from './context/PeriodContext';
 import { QuickAddProvider } from './context/QuickAddContext';
@@ -60,7 +62,13 @@ function Shell() {
     // Legal pages are public; everything else shows the sign-in screen.
     const open = ROUTES.find((r) => r.public && matchPath(r.path, pathname));
     const Page = open ? (desktop ? open.desktop : open.mobile) : desktop ? LOGIN.desktop : LOGIN.mobile;
-    return <Suspense fallback={<LoadingScreen />}><Page /></Suspense>;
+    return (
+      <>
+        <Suspense fallback={<LoadingScreen />}><Page /></Suspense>
+        <InstallPrompt signedIn={false} />
+        <UpdatePrompt />
+      </>
+    );
   }
 
   const Layout = desktop ? DesktopLayout : MobileLayout;
@@ -78,6 +86,8 @@ function Shell() {
         </Routes>
       </Suspense>
     </Layout>
+    <InstallPrompt signedIn />
+    <UpdatePrompt />
     </Suspense>
   );
 }

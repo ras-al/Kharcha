@@ -4,7 +4,6 @@ import {
 import { NavLink, useLocation } from 'react-router-dom';
 import OfflineBanner from '../components/OfflineBanner';
 import QuickAddSheet from '../components/quickadd/QuickAddSheet';
-import UpdatePrompt from '../components/UpdatePrompt';
 import { useQuickAdd } from '../context/QuickAddContext';
 import { ToastViewport } from '../context/ToastContext';
 import { useBudgetAlerts } from '../hooks/useBudgetAlerts';
@@ -71,7 +70,6 @@ export default function MobileLayout({ children }) {
 
       <QuickAddSheet />
       <ToastViewport className="inset-x-4 items-center" style={{ bottom: 'calc(6rem + env(safe-area-inset-bottom))' }} />
-      <UpdatePrompt />
     </div>
   );
 }
