@@ -4,16 +4,14 @@ import TemplateManager from '../../components/TemplateManager';
 import { useBudgets } from '../../hooks/useRecords';
 import { useStats } from '../../hooks/useStats';
 import { monthKey } from '../../lib/dates';
+import MobileHeader from '../../components/MobileHeader';
 
 export default function BudgetsMobile() {
   const { summary, loading } = useStats(monthKey(new Date()));
   const { limits, setLimit, error } = useBudgets();
   return (
-    <div className="pt-4 space-y-5">
-      <header>
-        <h1 className="text-[28px]">Budgets</h1>
-        <p className="text-muted mt-1">Set a monthly limit for any category. You get a message at 80% and again at 100%.</p>
-      </header>
+    <div className="space-y-4">
+      <MobileHeader title="Budgets">Monthly limits per category. You get a message at 80% and at 100%.</MobileHeader>
       {error && <ErrorState error={error} />}
       <section className="card px-5 py-1">
         {loading ? <ListSkeleton rows={4} /> : <BudgetEditor byCategory={summary.byCategory} limits={limits} setLimit={setLimit} />}

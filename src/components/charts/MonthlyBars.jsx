@@ -30,8 +30,8 @@ export default function MonthlyBars({ series, mode = 'expense', height = 260, ac
             </>
           ) : (
             <>
-              <Bar name="Core" dataKey="core" stackId="s" fill="rgb(var(--accent))" isAnimationActive={!reduce}>
-                {data.map((d) => <Cell key={d.key} fill={d.key === activeKey ? 'rgb(var(--ink))' : 'rgb(var(--accent))'} />)}
+              <Bar name="Core" dataKey="core" stackId="s" fill="rgb(var(--chart-bar))" isAnimationActive={!reduce}>
+                {data.map((d) => <Cell key={d.key} fill={d.key === activeKey ? 'rgb(var(--ink))' : 'rgb(var(--chart-bar))'} />)}
               </Bar>
               <Bar name="Hostel and academics" dataKey="fixed" stackId="s" fill="rgb(var(--line))" radius={[4, 4, 0, 0]} isAnimationActive={!reduce} />
             </>

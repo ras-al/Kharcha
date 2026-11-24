@@ -1,6 +1,6 @@
 /**
  * The fixed category list. Colours are mid-tones chosen to read on both the
- * light (#F2F4EF) and dark (forest) surfaces. Icons are mapped separately in
+ * light (#F5F5F5) and dark (#141414) surfaces. Icons are mapped separately in
  * components/CategoryIcon.jsx so this file stays plain data.
  */
 export const CATEGORIES = [
@@ -27,7 +27,6 @@ export const GROUPS = {
 export const INCOME_SOURCES = [
   { id: 'other', label: 'Other' },
   { id: 'scholarship', label: 'Scholarship' },
-  { id: 'refund', label: 'Refund' },
 ];
 
 const byId = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]));

@@ -39,7 +39,7 @@ function useModalBehaviour(open, onClose, panelRef) {
 function Backdrop({ onClose }) {
   return (
     <motion.div
-      className="fixed inset-0 bg-[#0E0F0C]/50"
+      className="fixed inset-0 bg-black/50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -80,7 +80,7 @@ export function Sheet({ open, onClose, title, children, full = false }) {
               <h2 className="text-xl">{title}</h2>
               <button type="button" className="icon-btn -mr-2" aria-label="Close" onClick={onClose}><X size={22} weight="bold" /></button>
             </div>
-            <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">{children}</div>
+            <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">{children}</div>
           </motion.div>
         </div>
       )}

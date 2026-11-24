@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
-import { usePreferences } from '../context/ThemeContext';
 
 const QUERY = '(min-width: 1024px)';
 
-/**
- * Chooses the desktop or mobile component tree. Reacts live to resizing and
- * honours the "Layout" setting, which can pin either interface.
- */
+/** Chooses the desktop or mobile component tree and reacts live to resizing. */
 export function useIsDesktop() {
-  const { viewMode } = usePreferences();
   const [matches, setMatches] = useState(() => window.matchMedia(QUERY).matches);
 
   useEffect(() => {
@@ -19,7 +14,5 @@ export function useIsDesktop() {
     return () => mql.removeEventListener('change', onChange);
   }, []);
 
-  if (viewMode === 'desktop') return true;
-  if (viewMode === 'mobile') return false;
   return matches;
 }

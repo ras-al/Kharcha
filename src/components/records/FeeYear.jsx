@@ -4,7 +4,7 @@ import { formatINR } from '../../lib/format';
 import { Confirm } from '../Overlay';
 
 /** One academic year: totals, then each fee with a paid/pending switch. */
-export default function FeeYear({ year, onToggle, onDelete, onAdd }) {
+export default function FeeYear({ year, onToggle, onDelete, onAdd, onEdit, compact = false }) {
   const [pendingDelete, setPendingDelete] = useState(null);
   const paidRatio = year.total ? year.paid / year.total : 0;
 
@@ -26,7 +26,28 @@ export default function FeeYear({ year, onToggle, onDelete, onAdd }) {
       )}
 
       <ul className="mt-3 divide-y divide-line">
-        {year.items.map((f) => (
+        {compact && year.items.map((f) => (
+          <li key={f.id} className="flex items-center gap-3 py-3">
+            <button type="button" className="flex-1 min-w-0 text-left" onClick={() => onEdit(f)} aria-label={`Edit ${f.description}`}>
+              <span className="block font-semibold leading-snug">{f.description}</span>
+              {f.section && <span className="block text-xs text-muted font-semibold mt-0.5">{f.section}</span>}
+            </button>
+            <div className="flex flex-col items-end gap-1.5 shrink-0">
+              <span className="num font-bold">{formatINR(f.amount)}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={f.status === 'paid'}
+                aria-label={`${f.description} paid`}
+                onClick={() => onToggle(f)}
+                className={`rounded-badge h-7 min-w-[72px] px-2.5 text-xs font-bold transition-colors duration-150 ${f.status === 'paid' ? 'bg-income/15 text-income' : 'bg-warn/15 text-warn'}`}
+              >
+                {f.status === 'paid' ? 'Paid' : 'Pending'}
+              </button>
+            </div>
+          </li>
+        ))}
+        {!compact && year.items.map((f) => (
           <li key={f.id} className="flex items-center gap-3 py-2.5">
             <div className="flex-1 min-w-0">
               <p className="font-semibold truncate">{f.description}</p>
@@ -49,7 +70,7 @@ export default function FeeYear({ year, onToggle, onDelete, onAdd }) {
           </li>
         ))}
       </ul>
-      <button type="button" className="btn-ghost btn-sm mt-2 -ml-3" onClick={() => onAdd(year.year)}>Add a fee to year {year.year}</button>
+      <button type="button" className={`btn-ghost btn-sm mt-2 ${compact ? 'w-full bg-sunk' : '-ml-3'}`} onClick={() => onAdd(year.year)}>Add a fee to year {year.year}</button>
 
       <Confirm open={Boolean(pendingDelete)} onClose={() => setPendingDelete(null)} onConfirm={() => onDelete(pendingDelete.id)} title="Delete this fee?">
         {pendingDelete?.description} for {formatINR(pendingDelete?.amount || 0)} will be removed.

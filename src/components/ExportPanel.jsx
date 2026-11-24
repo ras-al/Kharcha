@@ -15,13 +15,14 @@ export default function ExportPanel() {
   const fees = useCollection('fees').data;
   const hostel = useCollection('hostel').data;
   const scholarships = useCollection('scholarships').data;
+  const debts = useCollection('debts').data;
   const [busy, setBusy] = useState(null);
 
   async function run(kind) {
     setBusy(kind);
     try {
       const transactions = await fetchRange(user.uid, ALL_TIME);
-      if (kind === 'xlsx') downloadWorkbook({ transactions, fees, hostel, scholarships });
+      if (kind === 'xlsx') downloadWorkbook({ transactions, fees, hostel, scholarships, debts });
       else downloadCsv(transactions);
       toast(`Exported ${transactions.length} transactions`);
     } catch (e) {
@@ -33,7 +34,7 @@ export default function ExportPanel() {
   }
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="grid grid-cols-2 gap-3">
       <button type="button" className="btn-secondary" disabled={Boolean(busy)} onClick={() => run('xlsx')}>
         <DownloadSimple size={20} weight="bold" aria-hidden="true" />{busy === 'xlsx' ? 'Preparing' : 'Excel workbook'}
       </button>

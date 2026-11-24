@@ -7,9 +7,9 @@ import { CATEGORY_IDS } from '../../lib/categories';
 import { fromInputDate, toInputDate } from '../../lib/dates';
 import { validateAmount } from '../../lib/validation';
 
-function Field({ id, label, error, children }) {
+function Field({ id, label, error, children, className = '' }) {
   return (
-    <div>
+    <div className={className}>
       <label htmlFor={id} className="field-label">{label}</label>
       {children}
       {error && <p className="field-error">{error}</p>}
@@ -30,7 +30,7 @@ const amountInput = (value, set) => ({
   inputMode: 'decimal', className: 'field num', value, onChange: (e) => set(e.target.value.replace(/[^\d.]/g, '')),
 });
 
-export function FeeForm({ initial, defaultYear = 1, onSave, onCancel }) {
+export function FeeForm({ initial, defaultYear = 1, onSave, onCancel, onDelete }) {
   const [year, setYear] = useState(initial?.academicYear ?? defaultYear);
   const [description, setDescription] = useState(initial?.description ?? '');
   const [section, setSection] = useState(initial?.section ?? '');
@@ -79,6 +79,9 @@ export function FeeForm({ initial, defaultYear = 1, onSave, onCancel }) {
         </div>
       </fieldset>
       <Actions onCancel={onCancel} label={initial ? 'Save fee' : 'Add fee'} />
+      {initial && onDelete && (
+        <button type="button" className="btn-ghost w-full text-expense" onClick={() => onDelete(initial)}>Delete this fee</button>
+      )}
     </form>
   );
 }
@@ -132,7 +135,7 @@ export function HostelForm({ stays, onSave, onCancel }) {
       </Field>
       {kind === 'deposit' && (
         <label className="flex items-center gap-3 font-semibold min-h-[44px]">
-          <input type="checkbox" className="w-5 h-5 accent-[#163300]" checked={refundable} onChange={(e) => setRefundable(e.target.checked)} />
+          <input type="checkbox" className="w-5 h-5 accent-[rgb(var(--ink))]" checked={refundable} onChange={(e) => setRefundable(e.target.checked)} />
           Refundable when I leave
         </label>
       )}
@@ -194,7 +197,7 @@ export function TemplateForm({ onSave, onCancel }) {
 
   return (
     <form onSubmit={submit} noValidate className="grid grid-cols-[1fr_1fr_8rem_auto] gap-3 items-start max-lg:grid-cols-2">
-      <Field id="t-name" label="Name" error={errors.name}>
+      <Field id="t-name" label="Name" error={errors.name} className="max-lg:col-span-2">
         <input id="t-name" className="field" value={name} onChange={(e) => setName(e.target.value)} placeholder="Hostel monthly" />
       </Field>
       <Field id="t-cat" label="Category">
@@ -205,7 +208,7 @@ export function TemplateForm({ onSave, onCancel }) {
       <Field id="t-amount" label="Amount" error={errors.amount}>
         <input id="t-amount" {...amountInput(amount, setAmount)} placeholder="0" />
       </Field>
-      <div className="pt-[26px] max-lg:col-span-2">
+      <div className="pt-[26px] max-lg:pt-1 max-lg:col-span-2">
         <button type="submit" className="btn-primary w-full">Save template</button>
         {onCancel && <button type="button" className="btn-ghost w-full mt-2" onClick={onCancel}>Cancel</button>}
       </div>

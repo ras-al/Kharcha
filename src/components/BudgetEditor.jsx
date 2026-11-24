@@ -17,7 +17,7 @@ function LimitInput({ id, value, onSave }) {
     <input
       id={id}
       inputMode="decimal"
-      className="field num text-right w-32 min-h-[44px]"
+      className="field num text-right w-[7.5rem] min-h-[44px] px-3"
       placeholder="No limit"
       value={text}
       onChange={(e) => setText(e.target.value.replace(/[^\d.]/g, ''))}
@@ -35,11 +35,11 @@ export default function BudgetEditor({ byCategory, limits, setLimit }) {
         const spent = byCategory[id] || 0;
         const st = budgetStatus(spent, limits[id]);
         return (
-          <li key={id} className="flex items-center gap-4 py-4">
+          <li key={id} className="flex items-center gap-3 py-3.5">
             <CategoryIcon id={id} size={40} />
             <div className="flex-1 min-w-0">
-              <label htmlFor={`limit-${id}`} className="font-bold block">{id}</label>
-              <p className="text-sm text-muted num">{formatINR(spent)} spent this month{limits[id] ? `, ${Math.round(st.ratio * 100)}% of limit` : ''}</p>
+              <label htmlFor={`limit-${id}`} className="font-bold block truncate">{id}</label>
+              <p className="text-sm text-muted num truncate">{formatINR(spent, { whole: true })} this month{limits[id] ? ` · ${Math.round(st.ratio * 100)}%` : ''}</p>
               {limits[id] > 0 && <ProgressBar ratio={st.ratio} level={st.level} label={`${id} budget used`} className="mt-2" height={8} />}
             </div>
             <LimitInput id={`limit-${id}`} value={limits[id]} onSave={(n) => setLimit(id, n)} />

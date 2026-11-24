@@ -116,22 +116,22 @@ export default function TransactionsDesktop() {
       <div className="card p-5"><RangeFilter f={f} idPrefix="d" /></div>
 
       {selected.size > 0 && (
-        <div role="region" aria-label="Bulk actions" className="sticky top-[88px] z-10 flex items-center gap-3 rounded-control bg-forest text-lime dark:bg-lime dark:text-forest pl-6 pr-2 py-2 shadow-lift">
+        <div role="region" aria-label="Bulk actions" className="sticky top-[88px] z-10 flex items-center gap-3 rounded-control bg-accent text-accent-ink pl-6 pr-2 py-2 shadow-lift">
           <span className="font-bold">{selected.size} selected</span>
           <label htmlFor="recat" className="sr-only">Move to category</label>
           <select
             id="recat"
-            className="ml-auto rounded-badge bg-white/10 dark:bg-forest/10 font-bold px-4 min-h-[40px]"
+            className="ml-auto rounded-badge bg-accent-ink/10 font-bold px-4 min-h-[40px]"
             value=""
             onChange={(e) => { if (e.target.value) { recategorize(selectedTx, e.target.value); setSelected(new Set()); } }}
           >
-            <option value="" className="text-ink">Move to category</option>
-            {CATEGORY_IDS.map((c) => <option key={c} value={c} className="text-ink">{c}</option>)}
+            <option value="" className="text-ink bg-surface">Move to category</option>
+            {CATEGORY_IDS.map((c) => <option key={c} value={c} className="text-ink bg-surface">{c}</option>)}
           </select>
           <button type="button" className="btn btn-sm bg-expense text-on-expense hover:brightness-110" onClick={() => setConfirmDelete(true)}>
             <Trash size={16} weight="bold" aria-hidden="true" /> Delete
           </button>
-          <button type="button" className="icon-btn text-inherit hover:bg-white/10" aria-label="Clear selection" onClick={() => setSelected(new Set())}><X size={18} weight="bold" /></button>
+          <button type="button" className="icon-btn text-inherit hover:bg-accent-ink/10" aria-label="Clear selection" onClick={() => setSelected(new Set())}><X size={18} weight="bold" /></button>
         </div>
       )}
 
@@ -143,7 +143,7 @@ export default function TransactionsDesktop() {
           <thead className="bg-sunk/60">
             <tr>
               <th scope="col" className="w-12 pl-5">
-                <input type="checkbox" className="w-5 h-5 accent-[#163300]" checked={allOnPage} onChange={togglePage} aria-label="Select all on this page" />
+                <input type="checkbox" className="w-5 h-5 accent-[rgb(var(--ink))]" checked={allOnPage} onChange={togglePage} aria-label="Select all on this page" />
               </th>
               {COLUMNS.map((c) => (
                 <th key={c.key} scope="col" className={`${c.width || ''} px-3 py-3 text-sm font-bold text-muted ${c.align === 'right' ? 'text-right pr-6' : 'text-left'}`}
@@ -199,7 +199,7 @@ export default function TransactionsDesktop() {
                 className={`border-t border-line cursor-pointer transition-colors duration-100 hover:bg-sunk/60 focus-visible:bg-sunk ${selected.has(t.id) ? 'bg-accent/15' : ''}`}
               >
                 <td className="pl-5" onClick={(e) => e.stopPropagation()}>
-                  <input type="checkbox" className="w-5 h-5 accent-[#163300]" checked={selected.has(t.id)} onChange={() => toggleRow(t.id)} aria-label={`Select ${txTitle(t)}, ${formatINR(t.amount)}`} />
+                  <input type="checkbox" className="w-5 h-5 accent-[rgb(var(--ink))]" checked={selected.has(t.id)} onChange={() => toggleRow(t.id)} aria-label={`Select ${txTitle(t)}, ${formatINR(t.amount)}`} />
                 </td>
                 <EditableCell tx={t} field="date" editing={editing} setEditing={setEditing} onSave={saveInline}>
                   <span className="num">{format(t.date, 'd MMM yyyy')}</span>

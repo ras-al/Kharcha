@@ -4,10 +4,10 @@ import { useMemo, useState } from 'react';
 import { dayKey } from '../../lib/dates';
 import { formatINR } from '../../lib/format';
 
-// Light runs pale lime to forest; dark runs the other way so busy days stay bright.
+// Light runs pale grey to black; dark runs charcoal to white so busy days stay bright.
 const SCALES = {
-  light: ['rgb(var(--sunk))', '#D5F5BF', '#9FE870', '#5FAE32', '#2E6B12', '#163300'],
-  dark: ['rgb(var(--sunk))', '#2A4A16', '#3F7A1F', '#5FAE32', '#86D457', '#C6F5A6'],
+  light: ['rgb(var(--sunk))', '#D9D9D9', '#ADADAD', '#7A7A7A', '#454545', '#0A0A0A'],
+  dark: ['rgb(var(--sunk))', '#2E2E2E', '#4F4F4F', '#787878', '#B3B3B3', '#FAFAFA'],
 };
 
 /**

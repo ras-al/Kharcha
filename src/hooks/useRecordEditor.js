@@ -37,6 +37,13 @@ export function useRecordEditor() {
     close();
   }, [scholarships, toast, close]);
 
+  const deleteFee = useCallback((f) => {
+    fees.remove(f.id);
+    close();
+    const { id, ...rest } = f;
+    toast(`Deleted ${f.description}`, { action: { label: 'Undo', onClick: () => fees.save(rest, id) } });
+  }, [fees, toast, close]);
+
   const deleteScholarship = useCallback((s) => {
     scholarships.remove(s.id);
     const { id, ...rest } = s;
@@ -49,7 +56,7 @@ export function useRecordEditor() {
 
   return {
     fees, hostel, scholarships, form, close, openFee, openHostel, openScholarship,
-    saveFee, saveHostel, saveScholarship, deleteScholarship, loading, error, empty,
+    saveFee, saveHostel, saveScholarship, deleteFee, deleteScholarship, loading, error, empty,
   };
 }
 

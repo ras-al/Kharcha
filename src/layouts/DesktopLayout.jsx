@@ -1,5 +1,5 @@
 import {
-  Bank, CaretDown, ChartDonut, Gear, MagnifyingGlass, Moon, Plus, Printer, SidebarSimple, SignOut, SquaresFour,
+  Bank, CaretDown, ChartDonut, Gear, HandCoins, MagnifyingGlass, Moon, Plus, Printer, SidebarSimple, SignOut, SquaresFour,
   Sun, Table, Target, Ticket,
 } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -24,6 +24,7 @@ const NAV = [
   { to: '/transactions', label: 'Transactions', Icon: Table, key: 'G T' },
   { to: '/stats', label: 'Stats', Icon: ChartDonut, key: 'G S' },
   { to: '/budgets', label: 'Budgets', Icon: Target, key: 'G B' },
+  { to: '/debts', label: 'Debts', Icon: HandCoins },
   { to: '/fees', label: 'Fees and hostel', Icon: Bank, key: 'G F' },
   { to: '/events', label: 'Events', Icon: Ticket },
   { to: '/reports', label: 'Reports', Icon: Printer, key: 'G R' },
@@ -69,7 +70,7 @@ export default function DesktopLayout({ children }) {
                   end={end}
                   title={collapsed ? label : undefined}
                   className={({ isActive }) => `flex items-center gap-3 rounded-control min-h-[44px] font-bold text-[15px] transition-colors duration-150
-                    ${collapsed ? 'justify-center' : 'px-4'} ${isActive ? 'bg-forest text-lime dark:bg-lime dark:text-forest' : 'text-ink hover:bg-sunk'}`}
+                    ${collapsed ? 'justify-center' : 'px-4'} ${isActive ? 'bg-accent text-accent-ink' : 'text-ink hover:bg-sunk'}`}
                 >
                   {({ isActive }) => (
                     <>

@@ -41,7 +41,7 @@ export default function StatsDesktop() {
         </Panel>
 
         <div className="col-span-8 space-y-6">
-          <Panel title="Monthly spending" note="Lime is core spending, grey is hostel and academics. The selected month is drawn dark.">
+          <Panel title="Monthly spending" note="Grey is core spending, light grey is hostel and academics. The selected month is drawn in full contrast.">
             {s.loading ? <Skeleton className="h-[260px]" /> : <MonthlyBars series={s.series} activeKey={month} />}
           </Panel>
           <div className="grid grid-cols-2 gap-6">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMonthCompare } from '../hooks/useMonthCompare';
 import { monthKey, monthLabel, shiftMonth } from '../lib/dates';
+import { shortLabel } from '../lib/categories';
 import { formatINR, formatPct } from '../lib/format';
 import { Skeleton } from './States';
 
@@ -38,11 +39,11 @@ export default function MonthCompare({ anchor, compact = false }) {
             {monthLabel(a, 'MMMM yyyy')}: <b className="num">{formatINR(sa.expense)}</b>, which is{' '}
             <b className={`num ${diff > 0 ? 'text-expense' : 'text-income'}`}>{formatINR(Math.abs(diff))} {diff > 0 ? 'more' : 'less'}</b> than {monthLabel(b, 'MMMM')}.
           </p>
-          <table className="w-full text-sm mt-4">
+          <table className={`w-full mt-4 ${compact ? 'text-[13px] table-fixed' : 'text-sm'}`}>
             <caption className="sr-only">Spending per category in both months</caption>
             <thead>
               <tr className="text-muted text-left">
-                <th scope="col" className="py-2 font-semibold">Category</th>
+                <th scope="col" className={`py-2 font-semibold ${compact ? 'w-[30%]' : ''}`}>Category</th>
                 <th scope="col" className="py-2 font-semibold text-right">{monthLabel(a, 'MMM yy')}</th>
                 <th scope="col" className="py-2 font-semibold text-right">{monthLabel(b, 'MMM yy')}</th>
                 {!compact && <th scope="col" className="py-2 font-semibold text-right">Difference</th>}
@@ -52,11 +53,11 @@ export default function MonthCompare({ anchor, compact = false }) {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.id} className="border-t border-line">
-                  <th scope="row" className="py-2.5 text-left font-semibold">{r.id}</th>
-                  <td className="py-2.5 text-right num">{formatINR(r.a)}</td>
-                  <td className="py-2.5 text-right num text-muted">{formatINR(r.b)}</td>
+                  <th scope="row" className="py-2.5 text-left font-semibold truncate">{compact ? shortLabel(r.id) : r.id}</th>
+                  <td className="py-2.5 text-right num">{formatINR(r.a, { whole: compact })}</td>
+                  <td className="py-2.5 text-right num text-muted">{formatINR(r.b, { whole: compact })}</td>
                   {!compact && <td className={`py-2.5 text-right num font-bold ${r.diff > 0 ? 'text-expense' : r.diff < 0 ? 'text-income' : ''}`}>{formatINR(r.diff, { signed: true })}</td>}
-                  <td className="py-2.5 text-right num font-semibold">{r.pct === null ? 'new' : formatPct(r.pct)}</td>
+                  <td className={`py-2.5 text-right num font-semibold ${r.diff > 0 ? 'text-expense' : r.diff < 0 ? 'text-income' : ''}`}>{r.pct === null ? 'new' : formatPct(r.pct)}</td>
                 </tr>
               ))}
               {rows.length === 0 && <tr><td colSpan={5} className="py-4 text-muted">No spending in either month.</td></tr>}

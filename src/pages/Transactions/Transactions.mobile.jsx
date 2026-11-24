@@ -15,6 +15,7 @@ import { useTransactionFilters } from '../../hooks/useTransactionFilters';
 import { useTransactions } from '../../hooks/useTransactions';
 import { formatINR } from '../../lib/format';
 import { summarize } from '../../lib/stats';
+import MobileHeader from '../../components/MobileHeader';
 
 const PAGE = 120;
 
@@ -33,10 +34,10 @@ export default function TransactionsMobile() {
   const totals = useMemo(() => summarize(items), [items]);
 
   return (
-    <div className="pt-4">
-      <h1 className="text-[28px]">Transactions</h1>
+    <div>
+      <MobileHeader title="Transactions" />
 
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-3">
         <div className="relative flex-1">
           <label htmlFor="tx-search" className="sr-only">Search notes</label>
           <MagnifyingGlass size={20} weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true" />
@@ -44,7 +45,7 @@ export default function TransactionsMobile() {
         </div>
         <button type="button" className="btn-secondary px-4 bg-surface relative" onClick={() => setFiltersOpen(true)} aria-label={`Filters${f.activeCount ? `, ${f.activeCount} active` : ''}`}>
           <Funnel size={20} weight="bold" aria-hidden="true" />
-          {f.activeCount > 0 && <span className="absolute -top-1 -right-1 grid place-items-center w-5 h-5 rounded-badge bg-forest text-lime dark:bg-lime dark:text-forest text-xs font-bold">{f.activeCount}</span>}
+          {f.activeCount > 0 && <span className="absolute -top-1 -right-1 grid place-items-center w-5 h-5 rounded-badge bg-accent text-accent-ink text-xs font-bold">{f.activeCount}</span>}
         </button>
       </div>
 

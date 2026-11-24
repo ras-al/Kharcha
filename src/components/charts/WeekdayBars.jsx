@@ -14,7 +14,7 @@ export default function WeekdayBars({ data, height = 200 }) {
           <XAxis dataKey="short" tick={axisTick} axisLine={false} tickLine={false} />
           <Tooltip cursor={{ fill: 'rgb(var(--sunk))' }} content={<ChartTooltip />} />
           <Bar name="Average" dataKey="average" radius={[4, 4, 4, 4]} isAnimationActive={!reduce}>
-            {data.map((d) => <Cell key={d.day} fill={d.average === max && max > 0 ? 'rgb(var(--ink))' : 'rgb(var(--accent))'} />)}
+            {data.map((d) => <Cell key={d.day} fill={d.average === max && max > 0 ? 'rgb(var(--ink))' : 'rgb(var(--chart-bar))'} />)}
           </Bar>
         </BarChart>
       </ResponsiveContainer>

@@ -10,6 +10,7 @@ import { usePeriod } from '../../context/PeriodContext';
 import { useBudgets } from '../../hooks/useRecords';
 import { useStats } from '../../hooks/useStats';
 import { formatINR } from '../../lib/format';
+import MobileHeader from '../../components/MobileHeader';
 
 function Card({ title, children, note }) {
   return (
@@ -27,11 +28,8 @@ export default function StatsMobile() {
   const { limits } = useBudgets();
 
   return (
-    <div className="pt-4 space-y-4">
-      <header className="flex items-center justify-between">
-        <h1 className="text-[28px]">Stats</h1>
-        <MonthSwitcher value={month} onChange={setMonth} pattern="MMM yyyy" />
-      </header>
+    <div className="space-y-4">
+      <MobileHeader title="Stats" action={<MonthSwitcher value={month} onChange={setMonth} narrow />} />
       {s.error && <ErrorState error={s.error} />}
 
       <Card title="Where it went">
@@ -40,7 +38,7 @@ export default function StatsMobile() {
 
       {s.insights.length > 0 && <Insights items={s.insights} />}
 
-      <Card title="Last 12 months" note="Lime is core spending, grey is hostel and academics.">
+      <Card title="Last 12 months" note="Dark grey is core spending, light grey is hostel and academics.">
         {s.loading ? <Skeleton className="h-[220px]" /> : <MonthlyBars series={s.series} height={220} activeKey={month} narrow />}
       </Card>
 

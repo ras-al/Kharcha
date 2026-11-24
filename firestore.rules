@@ -32,9 +32,26 @@ service cloud.firestore {
         && (d.type == 'expense' || d.category == 'Income')
         && optString(d, 'note', 500)
         && (!('tags' in d) || (d.tags is list && d.tags.size() <= 20))
-        && (!('source' in d) || d.source in ['scholarship', 'refund', 'other'])
+        && (!('source' in d) || d.source in ['scholarship', 'other'])
         && (!('reimbursement' in d) || d.reimbursement in ['none', 'pending', 'received'])
-        && (!('origin' in d) || d.origin in ['manual', 'import', 'template']);
+        && (!('origin' in d) || d.origin in ['manual', 'import', 'template', 'debt']);
+    }
+
+    function validDebt(d) {
+      return d.keys().hasOnly(['direction', 'person', 'amount', 'category', 'date', 'note',
+                               'status', 'completedDate', 'transactionId', 'createdAt', 'updatedAt'])
+        && (!('direction' in d) || d.direction in ['owed', 'given'])
+        && d.person is string && d.person.size() > 0 && d.person.size() <= 80
+        && positive(d.amount)
+        && (
+          ((!('direction' in d) || d.direction == 'owed') && d.category in categories())
+          || ('direction' in d && d.direction == 'given' && (!('category' in d) || d.category == null || d.category in categories()))
+        )
+        && d.date is timestamp
+        && optString(d, 'note', 200)
+        && d.status in ['pending', 'completed']
+        && (!('completedDate' in d) || d.completedDate == null || d.completedDate is timestamp)
+        && (!('transactionId' in d) || d.transactionId == null || (d.transactionId is string && d.transactionId.size() <= 120));
     }
 
     function validFee(d) {
@@ -93,6 +110,10 @@ service cloud.firestore {
       match /templates/{id} {
         allow read, delete: if signedInAs(uid);
         allow create, update: if signedInAs(uid) && validTemplate(request.resource.data);
+      }
+      match /debts/{id} {
+        allow read, delete: if signedInAs(uid);
+        allow create, update: if signedInAs(uid) && validDebt(request.resource.data);
       }
       match /budgets/{category} {
         allow read, delete: if signedInAs(uid);

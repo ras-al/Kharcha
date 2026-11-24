@@ -7,12 +7,13 @@ import Preferences from '../../components/Preferences';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../../layouts/DesktopLayout';
 import { signOut } from '../../services/auth.service';
+import MobileHeader from '../../components/MobileHeader';
 
 export default function SettingsMobile() {
   const { user } = useAuth();
   return (
-    <div className="pt-4 space-y-5">
-      <h1 className="text-[28px]">Settings</h1>
+    <div className="space-y-4">
+      <MobileHeader title="Settings" />
       <section className="card p-5 flex items-center gap-4">
         <Avatar user={user} size={48} />
         <div className="min-w-0">

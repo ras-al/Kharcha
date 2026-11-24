@@ -27,3 +27,22 @@ export function validateAmount(amount) {
   if (n <= 0) return 'Amount must be more than zero.';
   return null;
 }
+
+/** Validates a debt entry (direction, friend name, amount, category, date, optional note). */
+export function validateDebt({ direction = 'owed', person, amount, category, date, note }) {
+  const errors = {};
+  if (direction !== 'owed' && direction !== 'given') errors.direction = 'Choose I owe or I gave.';
+  if (!person || !person.trim()) errors.person = direction === 'given' ? 'Enter who owes you.' : 'Enter who you owe.';
+  else if (person.trim().length > 80) errors.person = 'Keep the name under 80 characters.';
+
+  const n = Number(amount);
+  if (amount === '' || amount == null || Number.isNaN(n)) errors.amount = 'Enter an amount.';
+  else if (n <= 0) errors.amount = 'Amount must be more than zero.';
+  else if (n >= 1e8) errors.amount = 'That amount is too large.';
+  else if (Math.abs(n * 100 - Math.round(n * 100)) > 1e-6) errors.amount = 'Use at most two decimal places.';
+
+  if (direction !== 'given' && !isCategory(category)) errors.category = 'Pick a category.';
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) errors.date = 'Pick a date.';
+  if (note && note.length > 200) errors.note = 'Keep the note under 200 characters.';
+  return errors;
+}

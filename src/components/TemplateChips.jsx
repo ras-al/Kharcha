@@ -23,7 +23,7 @@ export default function TemplateChips({ scroll = false }) {
   return (
     <div>
       <p className="eyebrow mb-2 flex items-center gap-1.5"><Repeat size={14} weight="bold" aria-hidden="true" /> Recurring</p>
-      <div className={`flex gap-2 ${scroll ? 'overflow-x-auto no-scrollbar -mx-5 px-5' : 'flex-wrap'}`}>
+      <div className={`flex gap-2 ${scroll ? 'overflow-x-auto overscroll-x-contain no-scrollbar -mx-4 px-4' : 'flex-wrap'}`}>
         {templates.map((t) => (
           <button key={t.id} type="button" className="chip shrink-0" onClick={() => use(t)} aria-label={`Add ${t.name}, ${formatINR(t.amount)}, today`}>
             <CategoryIcon id={t.category} size={32} variant="tint" />

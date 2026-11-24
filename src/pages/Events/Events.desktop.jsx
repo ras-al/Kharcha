@@ -25,10 +25,10 @@ export default function EventsDesktop() {
       {e.error && <ErrorState error={e.error} />}
       <div className="grid grid-cols-4 gap-6">
         {stats.map(([label, value, sub], i) => (
-          <div key={label} className={`rounded-card p-5 ${i === 0 ? 'bg-forest text-lime' : 'card'}`}>
-            <p className={`text-[13px] font-semibold ${i === 0 ? 'text-[#D5F5BF]' : 'text-muted'}`}>{label}</p>
+          <div key={label} className={`rounded-card p-5 ${i === 0 ? 'bg-hero text-hero-ink dark:border dark:border-line' : 'card'}`}>
+            <p className={`text-[13px] font-semibold ${i === 0 ? 'text-hero-muted' : 'text-muted'}`}>{label}</p>
             {e.loading ? <Skeleton className="h-8 w-24 mt-2" /> : <p className="num text-[28px] font-extrabold mt-1">{formatINR(value)}</p>}
-            <p className={`text-xs font-semibold mt-1 ${i === 0 ? 'text-[#D5F5BF]' : 'text-muted'}`}>{sub}</p>
+            <p className={`text-xs font-semibold mt-1 ${i === 0 ? 'text-hero-muted' : 'text-muted'}`}>{sub}</p>
           </div>
         ))}
       </div>

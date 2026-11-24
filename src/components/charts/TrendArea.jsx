@@ -20,8 +20,8 @@ export default function TrendArea({ series, height = 280 }) {
           <XAxis dataKey="label" tick={axisTick} axisLine={false} tickLine={false} />
           <YAxis tick={axisTick} axisLine={false} tickLine={false} tickFormatter={formatCompact} width={56} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: 'rgb(var(--muted))', strokeWidth: 1 }} />
-          <Area name="Total spent" type="monotone" dataKey="expense" stroke="rgb(var(--ink))" strokeWidth={2} fill="rgb(var(--accent))" fillOpacity={0.35} isAnimationActive={!reduce} />
-          <Area name="Core" type="monotone" dataKey="core" stroke="#5FAE32" strokeWidth={2.5} strokeDasharray="6 4" fill="none" isAnimationActive={!reduce} />
+          <Area name="Total spent" type="monotone" dataKey="expense" stroke="rgb(var(--ink))" strokeWidth={2} fill="rgb(var(--ink))" fillOpacity={0.12} isAnimationActive={!reduce} />
+          <Area name="Core" type="monotone" dataKey="core" stroke="rgb(var(--muted))" strokeWidth={2.5} strokeDasharray="6 4" fill="none" isAnimationActive={!reduce} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

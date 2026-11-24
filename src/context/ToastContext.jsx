@@ -52,19 +52,19 @@ export function ToastViewport({ className = '', style }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8, transition: { duration: 0.15 } }}
             className={`pointer-events-auto flex items-center gap-3 rounded-control pl-5 pr-2 py-2 min-h-[56px] shadow-lift max-w-[420px]
-              ${t.tone === 'error' ? 'bg-expense text-on-expense' : 'bg-forest text-white dark:bg-lime dark:text-forest'}`}
+              ${t.tone === 'error' ? 'bg-expense text-on-expense' : 'bg-accent text-accent-ink'}`}
           >
             <p className="flex-1 text-[15px] font-semibold">{t.message}</p>
             {t.action && (
               <button
                 type="button"
-                className="rounded-badge px-4 min-h-[40px] font-bold text-lime hover:bg-white/10 dark:text-forest dark:hover:bg-forest/10"
+                className="rounded-badge px-4 min-h-[40px] font-bold text-accent-ink underline underline-offset-2 hover:bg-accent-ink/10"
                 onClick={() => { t.action.onClick(); dismiss(t.id); }}
               >
                 {t.action.label}
               </button>
             )}
-            <button type="button" aria-label="Dismiss" className="rounded-badge w-10 h-10 grid place-items-center hover:bg-white/10 dark:hover:bg-forest/10" onClick={() => dismiss(t.id)}>
+            <button type="button" aria-label="Dismiss" className="rounded-badge w-10 h-10 grid place-items-center hover:bg-accent-ink/10" onClick={() => dismiss(t.id)}>
               <X size={18} weight="bold" />
             </button>
           </motion.div>

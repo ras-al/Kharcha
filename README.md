@@ -4,7 +4,7 @@ A personal expense tracker that replaces `Expense.xlsx`. It is a React app backe
 
 ## What it does
 
-- **Daily spending** in eight categories, plus income tagged by source (scholarship, refund, other).
+- **Daily spending** in eight categories, plus income tagged by source (scholarship or other).
 - **Dashboard** with this month, year to date, income, net, core spending (everything except hostel and academics) and daily average. Charts cover the monthly trend, categories, a daily heatmap, income vs spending and the weekday pattern.
 - **Budgets** per category with a warning at 80% and again at 100%.
 - **Fees and hostel**: college fees by year with paid or pending, both hostel stays with deposits and the advance, and a scholarship timeline.
@@ -143,7 +143,7 @@ firestore.rules            per-user access and field validation
 firestore.indexes.json     date + category and date + type indexes
 ```
 
-The two interfaces are separate component trees. `useIsDesktop()` picks one at the router level (1024px and wider means laptop) and switches live when the window is resized. Settings > Layout can pin either one. Both trees use the same hooks and services, so a number is computed once whichever screen shows it.
+The two interfaces are separate component trees. `useIsDesktop()` picks one at the router level (1024px and wider means laptop) and switches live when the window is resized. Both trees use the same hooks and services, so a number is computed once whichever screen shows it.
 
 ## Data model
 
@@ -155,4 +155,4 @@ Everything lives under `users/{uid}`:
 - `scholarships/{id}`: `name`, `amount`, `date`
 - `budgets/{category}`: `monthlyLimit` (Workshop/Events is stored as `Workshop|Events`)
 - `templates/{id}`: `name`, `category`, `amount`, `note`
-- `settings/profile`: `currency`, `theme`, `defaultView`
+- `settings/profile`: `currency`, `theme`

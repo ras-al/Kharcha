@@ -21,13 +21,13 @@ export default function DayGroupedList({ items, renderRow, stickyTop = 0 }) {
       {groups.map((g) => (
         <Fragment key={g.key}>
           <h3
-            className="sticky z-10 flex justify-between items-baseline bg-bg px-4 pt-4 pb-1.5 text-sm font-bold text-muted tracking-normal"
+            className="sticky z-10 flex justify-between items-baseline bg-bg px-[18px] pt-4 pb-2 text-[13px] font-bold text-muted tracking-normal"
             style={{ top: stickyTop }}
           >
             <span>{dayHeading(g.date)}</span>
             {g.spent > 0 && <span className="num font-semibold">{formatINR(g.spent)} spent</span>}
           </h3>
-          <ul className="card p-1.5 mx-0">
+          <ul className="card p-1">
             {g.items.map((t) => <li key={t.id}>{renderRow(t)}</li>)}
           </ul>
         </Fragment>

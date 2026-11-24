@@ -1,5 +1,5 @@
 /**
- * Display preferences: colour theme and which interface to show.
+ * Display preference: colour theme.
  * Stored in localStorage for an instant first paint and mirrored to
  * users/{uid}/settings/profile so they follow the user across devices.
  */
@@ -8,14 +8,14 @@ import { useAuth } from './AuthContext';
 
 const PreferencesContext = createContext(null);
 const THEME_KEY = 'kharcha.theme';
-const VIEW_KEY = 'kharcha.view';
+
+localStorage.removeItem('kharcha.view');
 
 const darkQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
 
 export function ThemeProvider({ children }) {
   const { user } = useAuth();
   const [theme, setThemeState] = useState(() => localStorage.getItem(THEME_KEY) || 'system');
-  const [viewMode, setViewState] = useState(() => localStorage.getItem(VIEW_KEY) || 'auto');
   const [systemDark, setSystemDark] = useState(() => darkQuery().matches);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', resolved === 'dark');
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', resolved === 'dark' ? '#091105' : '#163300');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0A0A0A');
   }, [resolved]);
 
   // Pull saved preferences once signed in. The service is imported lazily
@@ -44,10 +44,6 @@ export function ThemeProvider({ children }) {
       if (p.theme) {
         setThemeState(p.theme);
         localStorage.setItem(THEME_KEY, p.theme);
-      }
-      if (p.defaultView) {
-        setViewState(p.defaultView);
-        localStorage.setItem(VIEW_KEY, p.defaultView);
       }
       }, () => {});
     });
@@ -64,15 +60,9 @@ export function ThemeProvider({ children }) {
     persist({ theme: next });
   }, [persist]);
 
-  const setViewMode = useCallback((next) => {
-    setViewState(next);
-    localStorage.setItem(VIEW_KEY, next);
-    persist({ defaultView: next });
-  }, [persist]);
-
   const value = useMemo(
-    () => ({ theme, resolved, setTheme, viewMode, setViewMode }),
-    [theme, resolved, setTheme, viewMode, setViewMode],
+    () => ({ theme, resolved, setTheme }),
+    [theme, resolved, setTheme],
   );
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }

@@ -9,8 +9,8 @@ import ReimburseSwitch from './ReimburseSwitch';
 import { TxAmount } from './Money';
 import { LargeBadge, txTitle } from './TxRow';
 
-const ORIGIN = { manual: 'Added by hand', import: 'Imported from Excel', template: 'Added from a recurring template' };
-const SOURCE = { scholarship: 'Scholarship', refund: 'Refund', other: 'Other' };
+const ORIGIN = { manual: 'Added by hand', import: 'Imported from Excel', template: 'Added from a recurring template', debt: 'Settled from debt' };
+const SOURCE = { scholarship: 'Scholarship', other: 'Other' };
 
 /** Body of the right-hand detail drawer on desktop. */
 export default function TxDetail({ tx, median, onClose }) {

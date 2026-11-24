@@ -1,9 +1,11 @@
-import { CaretRight, Gear, Printer, SignOut, Target, Ticket, UploadSimple } from '@phosphor-icons/react';
+import { CaretRight, Gear, HandCoins, Printer, SignOut, Target, Ticket, UploadSimple } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import LegalLinks from '../../components/LegalLinks';
 import { signOut } from '../../services/auth.service';
+import MobileHeader from '../../components/MobileHeader';
 
 const LINKS = [
+  { to: '/debts', label: 'Debts', Icon: HandCoins },
   { to: '/budgets', label: 'Budgets and templates', Icon: Target },
   { to: '/events', label: 'Workshops and events', Icon: Ticket },
   { to: '/reports', label: 'Monthly report', Icon: Printer },
@@ -13,8 +15,8 @@ const LINKS = [
 
 export default function MoreMobile() {
   return (
-    <div className="pt-4 space-y-5">
-      <h1 className="text-[28px]">More</h1>
+    <div className="space-y-4">
+      <MobileHeader title="More" />
       <nav aria-label="More" className="card p-2">
         <ul>
           {LINKS.map(({ to, label, Icon }) => (

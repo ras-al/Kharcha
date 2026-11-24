@@ -9,7 +9,7 @@ import { round2 } from '../lib/format';
 import { db } from './db';
 import { track } from './firebase';
 
-export const RECORD_COLLECTIONS = ['fees', 'hostel', 'scholarships', 'templates', 'budgets'];
+export const RECORD_COLLECTIONS = ['fees', 'hostel', 'scholarships', 'templates', 'budgets', 'debts'];
 
 const col = (uid, name) => collection(db, 'users', uid, name);
 

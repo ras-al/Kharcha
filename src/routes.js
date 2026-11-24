@@ -16,6 +16,7 @@ export const ROUTES = [
   { path: '/stats', title: 'Stats', ...page('Stats') },
   { path: '/fees', title: 'Fees and hostel', ...page('Fees') },
   { path: '/budgets', title: 'Budgets', ...page('Budgets') },
+  { path: '/debts', title: 'Debts', ...page('Debts') },
   { path: '/events', title: 'Workshops and events', ...page('Events') },
   { path: '/reports', title: 'Monthly report', ...page('Reports') },
   { path: '/settings', title: 'Settings', ...page('Settings') },

@@ -48,8 +48,8 @@ export default defineConfig(({ mode }) => ({
         name: 'Kharcha',
         short_name: 'Kharcha',
         description: 'Daily expense tracker for a student budget, in rupees.',
-        theme_color: '#163300',
-        background_color: '#F2F4EF',
+        theme_color: '#0A0A0A',
+        background_color: '#F5F5F5',
         display: 'standalone',
         start_url: '/',
         icons: [

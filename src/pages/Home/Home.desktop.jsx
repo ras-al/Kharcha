@@ -1,4 +1,4 @@
-import { Receipt, UploadSimple } from '@phosphor-icons/react';
+import { ArrowRight, Check, Receipt, UploadSimple } from '@phosphor-icons/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import BudgetList from '../../components/BudgetList';
@@ -7,6 +7,7 @@ import CategoryDonut, { CategoryLegend } from '../../components/charts/CategoryD
 import MonthlyBars from '../../components/charts/MonthlyBars';
 import TrendArea from '../../components/charts/TrendArea';
 import WeekdayBars from '../../components/charts/WeekdayBars';
+import { CompleteDebtModal, DebtIcon } from '../../components/debts/DebtModals';
 import Insights from '../../components/Insights';
 import Money from '../../components/Money';
 import { Drawer } from '../../components/Overlay';
@@ -15,8 +16,10 @@ import { EmptyState, ErrorState, Skeleton } from '../../components/States';
 import TemplateChips from '../../components/TemplateChips';
 import TxRow from '../../components/TxRow';
 import { usePeriod } from '../../context/PeriodContext';
+import { useDebts } from '../../hooks/useDebts';
 import { useBudgets } from '../../hooks/useRecords';
 import { useStats } from '../../hooks/useStats';
+import { debtDirection } from '../../lib/debts';
 import { monthLabel } from '../../lib/dates';
 import { formatINR, formatPct } from '../../lib/format';
 import TxDetail from '../../components/TxDetail';
@@ -49,6 +52,8 @@ export default function HomeDesktop() {
   const { month, isCurrent } = usePeriod();
   const s = useStats(month);
   const { limits } = useBudgets();
+  const debts = useDebts();
+  const [completingDebt, setCompletingDebt] = useState(null);
   const [detailId, setDetailId] = useState(null);
   const detail = detailId ? s.all.find((t) => t.id === detailId) : null;
   const name = monthLabel(month, 'MMMM');
@@ -74,6 +79,41 @@ export default function HomeDesktop() {
             </p>
           )}
           <div className="mt-8"><TemplateChips /></div>
+          {debts.pending.length > 0 && (
+            <div className="card p-5 mt-6 max-w-[38rem]">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h2 className="text-base">Pending debts</h2>
+                  <p className="text-xs font-semibold text-muted num">
+                    {[
+                      debts.owedTotal > 0 ? `You owe ${formatINR(debts.owedTotal)}` : null,
+                      debts.givenTotal > 0 ? `Owed to you ${formatINR(debts.givenTotal)}` : null,
+                    ].filter(Boolean).join(' · ')}
+                  </p>
+                </div>
+                <Link to="/debts" className="inline-flex items-center gap-1 text-sm font-bold hover:underline underline-offset-2">
+                  All ({debts.pending.length}) <ArrowRight size={14} weight="bold" aria-hidden="true" />
+                </Link>
+              </div>
+              <ul className="divide-y divide-line">
+                {debts.pending.slice(0, 3).map((item) => {
+                  const isGiven = debtDirection(item) === 'given';
+                  return (
+                    <li key={item.id} className="flex items-center gap-3 py-2">
+                      <DebtIcon debt={item} size={32} />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-sm truncate">{item.person} · <span className="num">{formatINR(item.amount)}</span></p>
+                        <p className="text-xs text-muted truncate">{isGiven ? 'Owes you' : 'You owe'} · {item.note || (isGiven ? 'Lent money' : item.category)}</p>
+                      </div>
+                      <button type="button" className="btn-primary btn-sm shrink-0" onClick={() => setCompletingDebt(item)}>
+                        <Check size={14} weight="bold" aria-hidden="true" /> {isGiven ? 'Received' : 'Complete'}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
           {s.insights.length > 0 && <div className="mt-8 max-w-[38rem]"><Insights items={s.insights} /></div>}
         </div>
         <div className="col-span-5">
@@ -137,6 +177,12 @@ export default function HomeDesktop() {
       <Drawer open={Boolean(detail)} onClose={() => setDetailId(null)} title="Transaction">
         {detail && <TxDetail tx={detail} median={s.median} onClose={() => setDetailId(null)} />}
       </Drawer>
+
+      <CompleteDebtModal
+        debt={completingDebt}
+        onClose={() => setCompletingDebt(null)}
+        onConfirm={(debt, date) => debts.complete(debt, date)}
+      />
     </div>
   );
 }

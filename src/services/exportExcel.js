@@ -30,7 +30,7 @@ function monthlyRows(transactions) {
   });
 }
 
-export function buildWorkbook({ transactions, fees = [], hostel = [], scholarships = [] }) {
+export function buildWorkbook({ transactions, fees = [], hostel = [], scholarships = [], debts = [] }) {
   const wb = XLSX.utils.book_new();
   const sorted = [...transactions].sort((a, b) => a.date - b.date);
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sorted.map(txRow)), 'Transactions');
@@ -50,6 +50,14 @@ export function buildWorkbook({ transactions, fees = [], hostel = [], scholarshi
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(scholarships.map((s) => ({
       Name: s.name, Amount: s.amount, Date: format(s.date, 'yyyy-MM-dd'),
     }))), 'Scholarships');
+  }
+  if (debts.length) {
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(debts.map((d) => ({
+      Direction: d.direction === 'given' ? 'Given (owed to me)' : 'Owed (I owe)',
+      Person: d.person, Category: d.direction === 'given' ? '' : (d.category || ''), Amount: d.amount, Date: format(d.date, 'yyyy-MM-dd'),
+      Note: d.note || '', Status: d.status,
+      'Completed on': d.completedDate ? format(d.completedDate, 'yyyy-MM-dd') : '',
+    }))), 'Debts');
   }
   return wb;
 }
